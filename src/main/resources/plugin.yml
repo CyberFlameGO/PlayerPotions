@@ -1,0 +1,7 @@
+name: PlayerPotions
+main: gg.solarmc.playerpotions.PlayerPotions
+version: ${project.version}
+authors: [ zone_infinity ]
+commands:
+  ppotion:
+    usage: /<command>

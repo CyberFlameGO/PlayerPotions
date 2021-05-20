@@ -1,0 +1,7 @@
+enabled: true
+
+# Potion Effects to be included
+potion:
+  - speed
+  - fire_resistance
+  - increase_damage
