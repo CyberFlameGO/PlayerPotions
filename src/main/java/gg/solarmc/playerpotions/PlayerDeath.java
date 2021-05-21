@@ -16,7 +16,12 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public record PlayerDeath(List<PotionEffectType> includedEffects) implements Listener {
+public class PlayerDeath implements Listener {
+    private final List<PotionEffectType> includedEffects;
+
+    public PlayerDeath(List<PotionEffectType> includedEffects) {
+        this.includedEffects = includedEffects;
+    }
 
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {

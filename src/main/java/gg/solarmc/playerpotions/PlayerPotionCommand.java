@@ -5,7 +5,13 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-public record PlayerPotionCommand(PlayerPotions plugin) implements CommandExecutor {
+public class PlayerPotionCommand implements CommandExecutor {
+    private final PlayerPotions plugin;
+
+    public PlayerPotionCommand(PlayerPotions plugin) {
+        this.plugin = plugin;
+    }
+
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (args[0].equalsIgnoreCase("reload")) {

@@ -1,6 +1,5 @@
 package gg.solarmc.playerpotions;
 
-import org.bukkit.command.defaults.ReloadCommand;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffectType;
 
