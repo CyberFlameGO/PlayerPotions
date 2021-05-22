@@ -43,7 +43,7 @@ public class PlayerDeath implements Listener {
 
         final PotionEffectType topPotionType = effects.get(0).getType();
         final String potionDisplayName = plugin.getConfig().getString("displayName")
-                .replace("{name}", player.getCustomName())
+                .replace("{name}", player.getName())
                 .replace("{displayName}", player.getDisplayName())
                 .replace("{potionColor}", getColor(topPotionType).toString());
 
