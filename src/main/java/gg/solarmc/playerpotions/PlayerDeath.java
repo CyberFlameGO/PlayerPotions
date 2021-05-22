@@ -1,5 +1,6 @@
 package gg.solarmc.playerpotions;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -17,10 +18,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class PlayerDeath implements Listener {
+    private final PlayerPotions plugin;
     private final List<PotionEffectType> includedEffects;
 
-    public PlayerDeath(List<PotionEffectType> includedEffects) {
-        this.includedEffects = includedEffects;
+    public PlayerDeath(PlayerPotions plugin) {
+        this.plugin = plugin;
+        this.includedEffects = plugin.getPotionEffects();
     }
 
     @EventHandler
@@ -37,14 +40,31 @@ public class PlayerDeath implements Listener {
 
         ItemStack playerPotion = new ItemStack(Material.POTION);
         PotionMeta potionMeta = (PotionMeta) playerPotion.getItemMeta();
-        potionMeta.setDisplayName(String.format("%s's Effect", player.getDisplayName()));
 
-        Color color = effects.get(0).getType().getColor();
+        final PotionEffectType topPotionType = effects.get(0).getType();
+        final String potionDisplayName = plugin.getConfig().getString("displayName")
+                .replace("{name}", player.getCustomName())
+                .replace("{displayName}", player.getDisplayName())
+                .replace("{potionColor}", getColor(topPotionType).toString());
+
+        potionMeta.setDisplayName(potionDisplayName);
+
+        Color color = topPotionType.getColor();
         potionMeta.setColor(color);
         effects.forEach(it -> potionMeta.addCustomEffect(it.withColor(color), true));
 
         playerPotion.setItemMeta(potionMeta);
         Location location = player.getLocation();
         location.getWorld().dropItemNaturally(location, playerPotion);
+    }
+
+    @SuppressWarnings("deprecation")
+    private ChatColor getColor(PotionEffectType effect) {
+        return switch (effect.getId()) {
+            case 1 -> ChatColor.AQUA;
+            case 12 -> ChatColor.GOLD;
+            case 5 -> ChatColor.RED;
+            default -> ChatColor.WHITE;
+        };
     }
 }

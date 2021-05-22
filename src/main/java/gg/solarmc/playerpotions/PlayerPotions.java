@@ -12,8 +12,7 @@ public class PlayerPotions extends JavaPlugin {
         this.saveDefaultConfig();
 
         if (this.getConfig().getBoolean("enabled")) {
-            List<PotionEffectType> effects = getPotionEffects();
-            this.getServer().getPluginManager().registerEvents(new PlayerDeath(effects), this);
+            this.getServer().getPluginManager().registerEvents(new PlayerDeath(this), this);
             this.getServer().getPluginCommand("ppotion").setExecutor(new PlayerPotionCommand(this));
         }
     }
@@ -28,4 +27,14 @@ public class PlayerPotions extends JavaPlugin {
     public void onDisable() {
 
     }
+
+    public void reloadPlugin() {
+        this.reloadConfig();
+
+        if (!this.getConfig().getBoolean("enabled"))
+            this.getServer().getPluginManager().disablePlugin(this);
+        else
+            this.getServer().getPluginManager().enablePlugin(this);
+    }
+
 }

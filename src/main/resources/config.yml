@@ -5,3 +5,11 @@ potion:
   - speed
   - fire_resistance
   - increase_damage
+
+# Display Name of the Custom potion
+# Variables :
+# name - Name of the player
+# displayName - Display Name of the Player
+# potionColor - Color of the potion
+# Tell me if you want more
+displayName: "{potionColor}{name}'s Effect"

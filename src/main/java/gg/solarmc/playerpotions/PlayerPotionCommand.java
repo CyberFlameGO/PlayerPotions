@@ -20,7 +20,7 @@ public class PlayerPotionCommand implements CommandExecutor {
                 return true;
             }
 
-            plugin.reloadConfig();
+            plugin.reloadPlugin();
             sender.sendMessage(ChatColor.GREEN + "Reload Complete!");
         }
         return true;
