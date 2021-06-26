@@ -47,7 +47,7 @@ public class PlayerDeath implements Listener {
                 .replace("{displayName}", player.getDisplayName())
                 .replace("{potionColor}", getColor(topPotionType).toString());
 
-        potionMeta.setDisplayName(potionDisplayName);
+        potionMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', potionDisplayName));
 
         Color color = topPotionType.getColor();
         potionMeta.setColor(color);
