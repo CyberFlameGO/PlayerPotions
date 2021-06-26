@@ -4,6 +4,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -14,6 +15,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,12 +39,13 @@ public class PlayerDeath implements Listener {
 
         if (effects.isEmpty())
             return;
+        final FileConfiguration config = plugin.getConfig();
 
         ItemStack playerPotion = new ItemStack(Material.POTION);
         PotionMeta potionMeta = (PotionMeta) playerPotion.getItemMeta();
+        PotionEffectType topPotionType = effects.get(0).getType();
 
-        final PotionEffectType topPotionType = effects.get(0).getType();
-        final String potionDisplayName = plugin.getConfig().getString("displayName")
+        String potionDisplayName = config.getString("displayName")
                 .replace("{name}", player.getName())
                 .replace("{displayName}", player.getDisplayName())
                 .replace("{potionColor}", getColor(topPotionType).toString());
@@ -51,7 +54,18 @@ public class PlayerDeath implements Listener {
 
         Color color = topPotionType.getColor();
         potionMeta.setColor(color);
-        effects.forEach(it -> potionMeta.addCustomEffect(it.withColor(color), true));
+        List<String> lore = new LinkedList<>();
+        effects.forEach(it -> {
+            potionMeta.addCustomEffect(it.withColor(color), true);
+            lore.add(
+                    ChatColor.translateAlternateColorCodes('&',
+                            config.getString("potionlore")
+                                    .replace("{name}", it.getType().getName() + " " + it.getAmplifier())
+                                    .replace("{duration}", formatDuration(it.getDuration()))
+                                    .replace("{color}", getColor(it.getType()).toString()))
+            );
+        });
+        potionMeta.setLore(lore);
 
         playerPotion.setItemMeta(potionMeta);
         Location location = player.getLocation();
@@ -66,5 +80,13 @@ public class PlayerDeath implements Listener {
             case 5 -> ChatColor.RED;
             default -> ChatColor.WHITE;
         };
+    }
+
+    private static String formatDuration(int durationInTicks) {
+        int seconds = durationInTicks / 20;
+
+        int sec = seconds % 60;
+        int min = seconds / 60;
+        return min + ":" + (sec < 10 ? "0" + sec : sec);
     }
 }

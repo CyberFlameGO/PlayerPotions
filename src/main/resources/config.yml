@@ -13,3 +13,10 @@ potion:
 # potionColor - Color of the potion
 # Tell me if you want more
 displayName: "{potionColor}{name}'s Effect"
+
+# Lore of each effect in the Custom potion
+# Variables :
+# name - The name of the Potion Effect
+# duration - duration left in the Potion Effect
+# color - Color of the Potion
+potionlore: "{name} ({duration})"
