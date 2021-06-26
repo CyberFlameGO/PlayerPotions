@@ -1,5 +1,6 @@
 package gg.solarmc.playerpotions;
 
+import org.apache.commons.lang3.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -13,7 +14,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.potion.PotionType;
 
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
@@ -57,10 +60,11 @@ public class PlayerDeath implements Listener {
         List<String> lore = new LinkedList<>();
         effects.forEach(it -> {
             potionMeta.addCustomEffect(it.withColor(color), true);
+            int amplifier = it.getAmplifier();
             lore.add(
                     ChatColor.translateAlternateColorCodes('&',
                             config.getString("potionlore")
-                                    .replace("{name}", it.getType().getName() + " " + it.getAmplifier())
+                                    .replace("{name}", getNameByEffect(it.getType()) + (amplifier == 0 ? "" : " " + amplifier))
                                     .replace("{duration}", formatDuration(it.getDuration()))
                                     .replace("{color}", getColor(it.getType()).toString()))
             );
@@ -82,11 +86,24 @@ public class PlayerDeath implements Listener {
         };
     }
 
+    private String getNameByEffect(PotionEffectType type) {
+        final PotionType potionFound = Arrays.stream(PotionType.values())
+                .filter(it -> it.getEffectType().equals(type))
+                .findFirst()
+                .orElse(PotionType.WATER);
+        return asTitleCase(potionFound.toString().replaceAll("_", " "));
+    }
+
+    private static String asTitleCase(String s) {
+        return Arrays.stream(s.toLowerCase().split(" "))
+                .map(StringUtils::capitalize)
+                .collect(Collectors.joining(" "));
+    }
+
     private static String formatDuration(int durationInTicks) {
         int seconds = durationInTicks / 20;
 
         int sec = seconds % 60;
-        int min = seconds / 60;
-        return min + ":" + (sec < 10 ? "0" + sec : sec);
+        return seconds / 60 + ":" + (sec < 10 ? "0" + sec : sec);
     }
 }
