@@ -88,6 +88,7 @@ public class PlayerDeath implements Listener {
 
     private String getNameByEffect(PotionEffectType type) {
         final PotionType potionFound = Arrays.stream(PotionType.values())
+                .filter(it -> it.getEffectType() != null)
                 .filter(it -> it.getEffectType().equals(type))
                 .findFirst()
                 .orElse(PotionType.WATER);
