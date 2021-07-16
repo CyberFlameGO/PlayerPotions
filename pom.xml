@@ -11,12 +11,23 @@
     </parent>
 
     <artifactId>PlayerPotions</artifactId>
-    <version>0.1.5</version>
+    <version>0.1.5-SNAPSHOT</version>
 
     <properties>
         <java.version>16</java.version>
-        <solarapi.version>1.1.5</solarapi.version>
+        <solarapi.version>1.1.7</solarapi.version>
     </properties>
+
+    <distributionManagement>
+        <repository>
+            <id>solar-repo</id>
+            <url>https://mvn-repo.solarmc.gg/releases</url>
+        </repository>
+        <snapshotRepository>
+            <id>solar-repo</id>
+            <url>https://mvn-repo.solarmc.gg/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
 
     <dependencies>
         <!-- https://github.com/SolarMC-Dev/SolarPaper-API/blob/master/pom.xml -->
