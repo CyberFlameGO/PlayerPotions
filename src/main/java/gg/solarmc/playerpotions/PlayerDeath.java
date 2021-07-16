@@ -64,7 +64,9 @@ public class PlayerDeath implements Listener {
             lore.add(
                     ChatColor.translateAlternateColorCodes('&',
                             config.getString("potionlore")
-                                    .replace("{name}", getNameByEffect(it.getType()) + (amplifier == 0 ? "" : " " + amplifier))
+                                    .replace("{name}",
+                                            asTitleCase(getPotionType(it.getType()).toString().replaceAll("_", " ")) +
+                                                    (amplifier == 0 ? "" : " " + amplifier))
                                     .replace("{duration}", formatDuration(it.getDuration()))
                                     .replace("{color}", getColor(it.getType()).toString()))
             );
@@ -76,23 +78,21 @@ public class PlayerDeath implements Listener {
         location.getWorld().dropItemNaturally(location, playerPotion);
     }
 
-    @SuppressWarnings("deprecation")
     private ChatColor getColor(PotionEffectType effect) {
-        return switch (effect.getId()) {
-            case 1 -> ChatColor.AQUA;
-            case 12 -> ChatColor.GOLD;
-            case 5 -> ChatColor.RED;
+        return switch (getPotionType(effect)) {
+            case SPEED -> ChatColor.AQUA;
+            case FIRE_RESISTANCE -> ChatColor.GOLD;
+            case STRENGTH -> ChatColor.RED;
             default -> ChatColor.WHITE;
         };
     }
 
-    private String getNameByEffect(PotionEffectType type) {
-        final PotionType potionFound = Arrays.stream(PotionType.values())
+    private PotionType getPotionType(PotionEffectType type) {
+        return Arrays.stream(PotionType.values())
                 .filter(it -> it.getEffectType() != null)
                 .filter(it -> it.getEffectType().equals(type))
                 .findFirst()
                 .orElse(PotionType.WATER);
-        return asTitleCase(potionFound.toString().replaceAll("_", " "));
     }
 
     private static String asTitleCase(String s) {

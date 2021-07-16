@@ -4,4 +4,5 @@ version: ${project.version}
 authors: [ zone_infinity ]
 commands:
   ppotion:
+    description: The only command of Player Potions
     usage: /<command>
